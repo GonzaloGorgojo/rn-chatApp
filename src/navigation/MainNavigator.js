@@ -4,6 +4,7 @@ import InitialScreen from "../screens/InitialScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import ChatScreen from "../screens/ChatScreen";
+import { screenLoginOptions } from "../screens/LoginScreen";
 
 const MainStackNavigator = createStackNavigator();
 
@@ -33,11 +34,15 @@ const HomeStackNavigator = createStackNavigator();
 export const HomeNavigator = ({ navigation }) => {
   return (
     <HomeStackNavigator.Navigator initialRouteName="Login">
-      <MainStackNavigator.Screen name="Login" component={LoginScreen} />
+      <MainStackNavigator.Screen
+        name="Login"
+        component={LoginScreen}
+        options={screenLoginOptions}
+      />
       <HomeStackNavigator.Screen
         name="Chat"
         component={ChatScreen}
-        options={{ headerShown: false }}
+        // options={{ headerShown: false }}
       />
     </HomeStackNavigator.Navigator>
   );

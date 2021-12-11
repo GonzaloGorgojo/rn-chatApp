@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 const RegisterScreen = (props) => {
   const { t } = useTranslation();
-  console.log(props.route.params.theme);
+
   return (
     <View style={styles.container}>
       <Text>Register Screen</Text>

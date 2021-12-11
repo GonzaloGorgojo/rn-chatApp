@@ -1,6 +1,9 @@
 {
   "translation": {
     "newUser": "Nuevo usuario",
-    "already": "Ya tengo cuenta"
+    "already": "Ya tengo cuenta",
+    "login": "Ingresar",
+    "email": "Escriba su email...",
+    "password": "Escriba su password..."
   }
 }
