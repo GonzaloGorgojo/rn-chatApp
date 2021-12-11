@@ -13,6 +13,8 @@ import SwitchSelector from "react-native-switch-selector";
 import lightMode from "../assets/themes/Light";
 import { Ionicons } from "@expo/vector-icons";
 import { BackHandler } from "react-native";
+import { connect } from "react-redux";
+import * as Types from "../store/types";
 
 const InitialScreen = (props) => {
   const { t, i18n } = useTranslation();
@@ -45,10 +47,12 @@ const InitialScreen = (props) => {
   ];
   const indexOfLan = language.findIndex((opt) => opt.value == i18n.language);
   useEffect(() => {
+    props.updateTheme(theme);
+
     BackHandler.addEventListener("hardwareBackPress", function () {
       return true;
     });
-  }, []);
+  }, [theme]);
   return (
     <KeyboardAvoidingView
       behavior={"padding"}
@@ -154,4 +158,12 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
-export default InitialScreen;
+
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = (dispatch) => ({
+  updateTheme: (theme) =>
+    dispatch({ type: Types.UPDATE_THEME, payload: { theme } }),
+});
+const connectComponent = connect(mapStateToProps, mapDispatchToProps);
+
+export default connectComponent(InitialScreen);
