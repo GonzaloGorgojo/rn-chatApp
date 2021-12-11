@@ -4,6 +4,12 @@
     "already": "Ya tengo cuenta",
     "login": "Ingresar",
     "email": "Escriba su email...",
-    "password": "Escriba su password..."
+    "password": "Escriba su password...",
+    "accessPass": "Olvide mi contraseña",
+    "register": "Registrarse",
+    "newUserAlert": "Se Registro correctamente email: ",
+    "recoverPass": "Enviar datos",
+    "titlePassRecover": "Enviaremos su nueva password",
+    "emailRecover": "Se envio correo electronico con su contraseña"
   }
 }

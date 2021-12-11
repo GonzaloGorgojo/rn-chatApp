@@ -7,18 +7,50 @@ import {
   KeyboardAvoidingView,
   Text,
   View,
+  TextInput,
+  Image,
+  Modal,
+  TouchableWithoutFeedback,
+  Pressable,
 } from "react-native";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
 import lightMode from "../assets/themes/Light";
-import { TextInput } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 
 const LoginScreen = (props) => {
   const theme = props.theme;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [recoveryEmail, setRecoveryEmail] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
   const { t } = useTranslation();
+
+  const handleLogin = () => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        props.navigation.replace("Chat");
+      })
+      .catch((error) => alert(error.message));
+  };
+
+  const recoverUser = () => {
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, recoveryEmail)
+      .then(() => {
+        alert(t("emailRecover"));
+        setModalVisible(!modalVisible);
+      })
+      .catch((error) => alert(error.message));
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={"padding"}
@@ -26,6 +58,49 @@ const LoginScreen = (props) => {
       keyboardVerticalOffset={Platform.select({ ios: -50, android: -100 })}
     >
       <StatusBar style={theme == "dark" ? "light" : "dark"} />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <TouchableOpacity
+          style={styles.modalContainer}
+          activeOpacity={2}
+          onPressOut={() => {
+            setModalVisible(false);
+          }}
+        >
+          <TouchableWithoutFeedback>
+            <View
+              style={theme == "dark" ? lightMode.modalView : styles.modalView}
+            >
+              <Text
+                style={
+                  theme == "dark" ? styles.titleModal : lightMode.titleModal
+                }
+              >
+                {t("titlePassRecover")}
+              </Text>
+              <TextInput
+                placeholderTextColor={theme == "dark" ? "white" : "black"}
+                style={
+                  theme == "dark" ? lightMode.inputModal : styles.inputModal
+                }
+                placeholder={t("email")}
+                value={recoveryEmail}
+                onChangeText={(text) => setRecoveryEmail(text)}
+                keyboardType={"email-address"}
+              />
+              <Pressable style={styles.buttonClose} onPress={recoverUser}>
+                <Text style={{ color: "white" }}>{t("recoverPass")}</Text>
+              </Pressable>
+            </View>
+          </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      </Modal>
       <ImageBackground
         style={styles.mainContainer}
         source={
@@ -34,6 +109,25 @@ const LoginScreen = (props) => {
             : require("../assets/imgs/day.png")
         }
       >
+        <TouchableOpacity
+          style={styles.backLoginButton}
+          onPress={() => props.navigation.goBack()}
+        >
+          <Ionicons
+            name="ios-arrow-back-circle-outline"
+            size={25}
+            color={theme == "dark" ? "white" : "black"}
+            left={20}
+          />
+        </TouchableOpacity>
+        <Image
+          style={styles.avatarContainer}
+          source={
+            theme == "dark"
+              ? require("../assets/imgs/nightavatar.png")
+              : require("../assets/imgs/dayavatar.png")
+          }
+        ></Image>
         <View style={styles.inputLoginContainer}>
           <TextInput
             placeholderTextColor={theme == "dark" ? "white" : "black"}
@@ -54,7 +148,7 @@ const LoginScreen = (props) => {
         </View>
         <TouchableOpacity
           style={theme == "dark" ? styles.button : lightMode.button}
-          onPress={() => props.navigation.replace("Chat")}
+          onPress={handleLogin}
         >
           <Text
             style={[
@@ -63,6 +157,11 @@ const LoginScreen = (props) => {
             ]}
           >
             {t("login")}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Text style={theme == "dark" ? styles.password : lightMode.password}>
+            {t("accessPass")}
           </Text>
         </TouchableOpacity>
       </ImageBackground>
@@ -82,8 +181,7 @@ const styles = StyleSheet.create({
     height: 120,
     flexDirection: "column",
     justifyContent: "space-around",
-    width: "50%",
-    marginTop: 50,
+    width: "60%",
   },
   inputLogin: {
     padding: 10,
@@ -95,7 +193,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "black",
     padding: 10,
-    marginVertical: 5,
     borderRadius: 15,
     borderWidth: 1,
     borderStyle: "solid",
@@ -104,40 +201,66 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
   },
+  password: {
+    marginTop: 15,
+    color: "white",
+  },
+  backLoginButton: {
+    position: "absolute",
+    top: 60,
+    left: 16,
+  },
+  avatarContainer: {
+    height: 130,
+    width: 130,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  inputModal: {
+    padding: 10,
+    borderWidth: 0.7,
+    borderColor: "#5f615f",
+    borderStyle: "solid",
+    borderRadius: 5,
+    width: 200,
+  },
+  buttonClose: {
+    alignItems: "center",
+    backgroundColor: "purple",
+    padding: 10,
+    marginTop: 25,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "white",
+  },
+  titleModal: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 15,
+    marginBottom: 10,
+  },
 });
 
 const mapStateToProps = (state) => state;
 const connectComponent = connect(mapStateToProps);
 
 export default connectComponent(LoginScreen);
-
-export const screenLoginOptions = (navData) => {
-  return {
-    headerTitle: "Login",
-    headerStyle: {
-      backgroundColor: "#1b0730",
-    },
-    headerTitleStyle: {
-      color: "white",
-      textAlign: "center",
-      fontSize: 20,
-    },
-    headerRightContainerStyle: {
-      marginRight: 5,
-    },
-    headerLeftContainerStyle: {
-      marginLeft: 5,
-    },
-    headerLeft: () => (
-      <TouchableOpacity onPress={() => navData.navigation.replace("Main")}>
-        <Ionicons
-          name="ios-arrow-back-circle-outline"
-          size={25}
-          color="white"
-          left={20}
-        />
-      </TouchableOpacity>
-    ),
-    headerRight: () => <TouchableOpacity onPress={() => {}}></TouchableOpacity>,
-  };
-};
