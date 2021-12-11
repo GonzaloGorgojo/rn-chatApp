@@ -4,6 +4,12 @@
     "already": "Already have account",
     "login": "Login",
     "email": "Type your email...",
-    "password": "Type your password..."
+    "password": "Type your password...",
+    "accessPass": "Forgot Password?",
+    "register": "Sing Up",
+    "newUserAlert": "Email registered correctly: ",
+    "recoverPass": "Send data",
+    "titlePassRecover": "We will send your new password",
+    "emailRecover": "We sent you an email with your new password"
   }
 }

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   View,
+  Image,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import SwitchSelector from "react-native-switch-selector";
@@ -20,7 +21,7 @@ import { firebase } from "../../firebase";
 const InitialScreen = (props) => {
   firebase;
   const { t, i18n } = useTranslation();
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(props.theme);
   const language = [
     { label: "En", value: "en" },
     { label: "Es", value: "es" },
@@ -47,7 +48,11 @@ const InitialScreen = (props) => {
       ),
     },
   ];
-  const indexOfLan = language.findIndex((opt) => opt.value == i18n.language);
+  const indexOfLang = language.findIndex((opt) => opt.value == i18n.language);
+  const indexOfTheme = themeOptions.findIndex(
+    (opt) => opt.value == props.theme
+  );
+
   useEffect(() => {
     props.updateTheme(theme);
 
@@ -73,7 +78,7 @@ const InitialScreen = (props) => {
         <View style={styles.switchTheme}>
           <SwitchSelector
             options={themeOptions}
-            initial={0}
+            initial={indexOfTheme}
             onPress={(value) => setTheme(value)}
             selectedColor={"white"}
             buttonColor={"purple"}
@@ -85,7 +90,7 @@ const InitialScreen = (props) => {
         <View style={styles.switchLanguage}>
           <SwitchSelector
             options={language}
-            initial={indexOfLan}
+            initial={indexOfLang}
             onPress={(value) => i18n.changeLanguage(value)}
             backgroundColor={theme == "dark" ? "black" : "white"}
             textColor={theme == "dark" ? "white" : "black"}
@@ -96,6 +101,10 @@ const InitialScreen = (props) => {
           />
         </View>
 
+        <Image
+          style={styles.logoImage}
+          source={require("../assets/imgs/logo.png")}
+        ></Image>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={theme == "dark" ? styles.button : lightMode.button}
@@ -134,14 +143,14 @@ const styles = StyleSheet.create({
   switchTheme: {
     width: 80,
     position: "absolute",
-    top: 40,
+    top: 60,
     left: 16,
   },
-  switchLanguage: { width: 80, position: "absolute", top: 40, right: 16 },
+  switchLanguage: { width: 80, position: "absolute", top: 60, right: 16 },
   buttonContainer: {
     flexDirection: "column",
     justifyContent: "space-around",
-    marginTop: 90,
+    marginTop: 15,
     width: "80%",
   },
   button: {
@@ -156,6 +165,10 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
+  },
+  logoImage: {
+    height: 130,
+    width: 130,
   },
 });
 

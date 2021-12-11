@@ -1,7 +1,7 @@
 import * as Types from "./types";
 
 const initialState = {
-  theme: [],
+  theme: ["dark"],
 };
 
 const reducer = (state = initialState, action) => {

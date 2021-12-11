@@ -24,6 +24,7 @@ export const MainNavigator = () => {
       <MainStackNavigator.Screen
         name="RegisterScreen"
         component={RegisterScreen}
+        options={{ headerShown: false }}
       />
     </MainStackNavigator.Navigator>
   );
@@ -37,7 +38,7 @@ export const HomeNavigator = ({ navigation }) => {
       <MainStackNavigator.Screen
         name="Login"
         component={LoginScreen}
-        options={screenLoginOptions}
+        options={{ headerShown: false }}
       />
       <HomeStackNavigator.Screen
         name="Chat"
