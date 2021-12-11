@@ -21,6 +21,11 @@ const lightMode = StyleSheet.create({
   buttonText: {
     color: "black",
   },
+  inputLogin: {
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+  },
 });
 
 export default lightMode;

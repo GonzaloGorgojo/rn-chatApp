@@ -1,6 +1,9 @@
 {
   "translation": {
     "newUser": "New user",
-    "already": "Already have account"
+    "already": "Already have account",
+    "login": "Login",
+    "email": "Type your email...",
+    "password": "Type your password..."
   }
 }

@@ -15,8 +15,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { BackHandler } from "react-native";
 import { connect } from "react-redux";
 import * as Types from "../store/types";
+import { firebase } from "../../firebase";
 
 const InitialScreen = (props) => {
+  firebase;
   const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState("dark");
   const language = [
@@ -49,9 +51,9 @@ const InitialScreen = (props) => {
   useEffect(() => {
     props.updateTheme(theme);
 
-    BackHandler.addEventListener("hardwareBackPress", function () {
-      return true;
-    });
+    // BackHandler.addEventListener("hardwareBackPress", function () {
+    //   return true;
+    // });
   }, [theme]);
   return (
     <KeyboardAvoidingView
@@ -97,9 +99,7 @@ const InitialScreen = (props) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={theme == "dark" ? styles.button : lightMode.button}
-            onPress={() =>
-              props.navigation.navigate("RegisterScreen", { theme: theme })
-            }
+            onPress={() => props.navigation.navigate("RegisterScreen")}
           >
             <Text
               style={theme == "dark" ? styles.buttonText : lightMode.buttonText}
@@ -109,7 +109,7 @@ const InitialScreen = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={theme == "dark" ? styles.button : lightMode.button}
-            onPress={() => props.navigation.navigate("Login", { theme: theme })}
+            onPress={() => props.navigation.navigate("Login")}
           >
             <Text
               style={theme == "dark" ? styles.buttonText : lightMode.buttonText}
