@@ -1,4 +1,4 @@
-# Chat Api :iphone:
+# Chat App :iphone:
 
 ### What is this :grey_question:
 
@@ -12,7 +12,7 @@ This is a Mobile App where you can chat with random people, the last 25 messages
 - You dont have to sing up with your real email, you can use whatever you want. Firebase does not validate real emails here.
 - Finally you can try it :smiley:
 
-### :computer: Technologies used :grey_question:
+### :computer: Technologies used
 
 - React-Native
 - Expo
@@ -21,7 +21,7 @@ This is a Mobile App where you can chat with random people, the last 25 messages
 - React-navigation
 - Firebase
 
-### :wrench: How To Use
+### :wrench: How to check code
 
 - Clone this repository (or fork, then clone your fork :) )
 - Run `npm i`
