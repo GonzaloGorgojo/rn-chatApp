@@ -8,18 +8,23 @@ import {
   ImageBackground,
   View,
   Image,
+  LogBox,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import SwitchSelector from "react-native-switch-selector";
 import lightMode from "../assets/themes/Light";
 import { Ionicons } from "@expo/vector-icons";
-import { BackHandler } from "react-native";
 import { connect } from "react-redux";
 import * as Types from "../store/types";
-import { firebase } from "../../firebase";
+import { firebaseApp } from "../../firebase";
 
 const InitialScreen = (props) => {
-  firebase;
+  firebaseApp;
+
+  LogBox.ignoreLogs([
+    `AsyncStorage has been extracted from react-native core and will be removed in a future release.`,
+  ]);
+
   const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState(props.theme);
   const language = [
@@ -55,10 +60,6 @@ const InitialScreen = (props) => {
 
   useEffect(() => {
     props.updateTheme(theme);
-
-    // BackHandler.addEventListener("hardwareBackPress", function () {
-    //   return true;
-    // });
   }, [theme]);
   return (
     <KeyboardAvoidingView
