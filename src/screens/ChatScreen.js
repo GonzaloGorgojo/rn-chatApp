@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { BackHandler } from "react-native";
 import { getAuth } from "@firebase/auth";
-import { db } from "../../firebase";
+import { db } from "../../src/config/firebase";
 import { collection, getDocs } from "firebase/firestore/lite";
 
 const ChatScreen = (props) => {

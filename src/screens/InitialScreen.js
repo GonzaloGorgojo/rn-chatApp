@@ -16,7 +16,14 @@ import lightMode from "../assets/themes/Light";
 import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import * as Types from "../store/types";
-import { firebaseApp } from "../../firebase";
+import { firebaseApp } from "../config/firebase";
+import * as Google from "expo-google-app-auth";
+import {
+  GoogleAuthProvider,
+  signInWithCredential,
+  getAuth,
+} from "firebase/auth";
+import data from "../config/googleProvider.json";
 
 const InitialScreen = (props) => {
   firebaseApp;
@@ -57,6 +64,31 @@ const InitialScreen = (props) => {
   const indexOfTheme = themeOptions.findIndex(
     (opt) => opt.value == props.theme
   );
+
+  async function signInWithGoogleAsync() {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId: data.androidClientId,
+        iosClientId: data.iosClientId,
+        scopes: ["profile", "email"],
+      });
+
+      if (result.type === "success") {
+        const { idToken, accessToken } = result;
+        const credential = GoogleAuthProvider.credential(idToken, accessToken);
+        const auth = getAuth();
+        signInWithCredential(auth, credential)
+          .then((userCredential) => {
+            props.navigation.navigate("Chat");
+          })
+          .catch((e) => console.log(e));
+      } else {
+        console.log("Permission denied");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   useEffect(() => {
     props.updateTheme(theme);
@@ -127,6 +159,24 @@ const InitialScreen = (props) => {
               {t("already")}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              { width: "50%", marginLeft: "25%" },
+              theme == "dark" ? styles.button : lightMode.button,
+            ]}
+            onPress={signInWithGoogleAsync}
+          >
+            <Text
+              style={theme == "dark" ? styles.buttonText : lightMode.buttonText}
+            >
+              {t("googleLogIn")}{" "}
+            </Text>
+            <Ionicons
+              name="logo-google"
+              size={25}
+              color={theme == "dark" ? "white" : "black"}
+            />
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </KeyboardAvoidingView>
@@ -156,6 +206,8 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
     backgroundColor: "black",
     padding: 10,
     marginVertical: 5,

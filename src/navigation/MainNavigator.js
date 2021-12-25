@@ -26,6 +26,11 @@ export const MainNavigator = () => {
         component={RegisterScreen}
         options={{ headerShown: false }}
       />
+      <MainStackNavigator.Screen
+        name="Chat"
+        component={ChatScreen}
+        // options={{ headerShown: false }}
+      />
     </MainStackNavigator.Navigator>
   );
 };
