@@ -15,7 +15,6 @@ import SwitchSelector from "react-native-switch-selector";
 import lightMode from "../assets/themes/Light";
 import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
-import * as Types from "../store/types";
 import { firebaseApp } from "../config/firebase";
 import * as Google from "expo-google-app-auth";
 import {
@@ -24,6 +23,8 @@ import {
   getAuth,
 } from "firebase/auth";
 import data from "../config/googleProvider.json";
+import { useSelector, useDispatch } from "react-redux";
+import { updateTheme } from "../store/themeReducer";
 
 const InitialScreen = (props) => {
   firebaseApp;
@@ -32,8 +33,9 @@ const InitialScreen = (props) => {
     `AsyncStorage has been extracted from react-native core and will be removed in a future release.`,
   ]);
 
+  const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const [theme, setTheme] = useState(props.theme);
+  const [theme, setTheme] = useState(useSelector((state) => state.theme.theme));
   const language = [
     { label: "En", value: "en" },
     { label: "Es", value: "es" },
@@ -61,11 +63,9 @@ const InitialScreen = (props) => {
     },
   ];
   const indexOfLang = language.findIndex((opt) => opt.value == i18n.language);
-  const indexOfTheme = themeOptions.findIndex(
-    (opt) => opt.value == props.theme
-  );
+  const indexOfTheme = themeOptions.findIndex((opt) => opt.value == theme);
 
-  async function signInWithGoogleAsync() {
+  const signInWithGoogleAsync = async () => {
     try {
       const result = await Google.logInAsync({
         androidClientId: data.androidClientId,
@@ -88,10 +88,10 @@ const InitialScreen = (props) => {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   useEffect(() => {
-    props.updateTheme(theme);
+    dispatch(updateTheme(theme));
   }, [theme]);
   return (
     <KeyboardAvoidingView

@@ -19,9 +19,10 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { useSelector } from "react-redux";
 
 const RegisterScreen = (props) => {
-  const theme = props.theme;
+  const theme = useSelector((state) => state.theme.theme);
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const { t } = useTranslation();
@@ -159,7 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => state;
-const connectComponent = connect(mapStateToProps);
-
-export default connectComponent(RegisterScreen);
+export default RegisterScreen;

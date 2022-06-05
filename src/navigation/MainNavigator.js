@@ -4,7 +4,7 @@ import InitialScreen from "../screens/InitialScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import ChatScreen from "../screens/ChatScreen";
-import { screenLoginOptions } from "../screens/LoginScreen";
+import { chatScreenOptions } from "../screens/ChatScreen";
 
 const MainStackNavigator = createStackNavigator();
 
@@ -29,7 +29,7 @@ export const MainNavigator = () => {
       <MainStackNavigator.Screen
         name="Chat"
         component={ChatScreen}
-        // options={{ headerShown: false }}
+        options={chatScreenOptions}
       />
     </MainStackNavigator.Navigator>
   );
@@ -48,7 +48,7 @@ export const HomeNavigator = ({ navigation }) => {
       <HomeStackNavigator.Screen
         name="Chat"
         component={ChatScreen}
-        // options={{ headerShown: false }}
+        options={chatScreenOptions}
       />
     </HomeStackNavigator.Navigator>
   );
