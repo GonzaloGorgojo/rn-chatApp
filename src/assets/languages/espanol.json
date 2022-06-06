@@ -11,6 +11,7 @@
     "recoverPass": "Enviar datos",
     "titlePassRecover": "Enviaremos su nueva password",
     "emailRecover": "Se envio correo electronico con su contraseña",
-    "googleLogIn": "Ingresar con "
+    "googleLogIn": "Ingresar con ",
+    "chatroomTitle": "Sala de Chat"
   }
 }

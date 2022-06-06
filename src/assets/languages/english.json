@@ -11,6 +11,7 @@
     "recoverPass": "Send data",
     "titlePassRecover": "We will send your new password",
     "emailRecover": "We sent you an email with your new password",
-    "googleLogIn": "Log In with "
+    "googleLogIn": "Log In with ",
+    "chatroomTitle": "Chat Room"
   }
 }

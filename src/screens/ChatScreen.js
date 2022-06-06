@@ -6,10 +6,11 @@ import { getAuth } from "@firebase/auth";
 import { db } from "../../src/config/firebase";
 import { collection, getDocs } from "firebase/firestore/lite";
 import { Ionicons } from "@expo/vector-icons";
-import { connect } from "react-redux";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const ChatScreen = ({ navigation }) => {
+  const { t } = useTranslation();
   const theme = useSelector((state) => state.theme.theme);
   const auth = getAuth();
   const [test, setTest] = useState([]);
@@ -20,15 +21,40 @@ const ChatScreen = ({ navigation }) => {
   //   setTest(cityList);
   // };
 
+  const headerOptions = {
+    headerStyle: {
+      backgroundColor: theme === "dark" ? "black" : "white",
+    },
+    headerTitleStyle: {
+      color: theme === "dark" ? "white" : "black",
+      textAlign: "center",
+      fontSize: 20,
+    },
+    headerTitle: t("chatroomTitle"),
+    headerLeftContainerStyle: {
+      marginLeft: 5,
+    },
+    headerRight: () => <TouchableOpacity onPress={() => {}}></TouchableOpacity>,
+    headerLeft: () => (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.replace("Main");
+        }}
+      >
+        <Ionicons
+          name="arrow-undo"
+          size={25}
+          color={theme === "dark" ? "white" : "black"}
+        />
+      </TouchableOpacity>
+    ),
+  };
+
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", function () {
       return true;
     });
-    navigation.setOptions({
-      headerStyle: {
-        backgroundColor: "black",
-      },
-    });
+    navigation.setOptions(headerOptions);
     // GetData();
   }, [test]);
 
@@ -53,27 +79,3 @@ const styles = StyleSheet.create({
 });
 
 export default ChatScreen;
-
-export const chatScreenOptions = (navData) => {
-  return {
-    headerTitle: "Solicitar Usuario",
-    headerTitleStyle: {
-      color: "black",
-      textAlign: "center",
-      fontSize: 20,
-    },
-    headerLeftContainerStyle: {
-      marginLeft: 5,
-    },
-    headerLeft: () => (
-      <TouchableOpacity
-        onPress={() => {
-          navData.navigation.replace("Login");
-        }}
-      >
-        <Ionicons name="arrow-undo" size={25} color="black" />
-      </TouchableOpacity>
-    ),
-    headerRight: () => <TouchableOpacity onPress={() => {}}></TouchableOpacity>,
-  };
-};
