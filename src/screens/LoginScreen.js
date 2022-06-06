@@ -22,9 +22,10 @@ import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
 import lightMode from "../assets/themes/Light";
 import { Ionicons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 const LoginScreen = (props) => {
-  const theme = props.theme;
+  const theme = useSelector((state) => state.theme.theme);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [recoveryEmail, setRecoveryEmail] = useState("");
@@ -260,7 +261,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => state;
-const connectComponent = connect(mapStateToProps);
-
-export default connectComponent(LoginScreen);
+export default LoginScreen;

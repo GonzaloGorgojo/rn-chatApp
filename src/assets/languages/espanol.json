@@ -10,6 +10,8 @@
     "newUserAlert": "Se Registro correctamente email: ",
     "recoverPass": "Enviar datos",
     "titlePassRecover": "Enviaremos su nueva password",
-    "emailRecover": "Se envio correo electronico con su contraseña"
+    "emailRecover": "Se envio correo electronico con su contraseña",
+    "googleLogIn": "Ingresar con ",
+    "chatroomTitle": "Sala de Chat"
   }
 }

@@ -8,20 +8,35 @@ import {
   ImageBackground,
   View,
   Image,
+  LogBox,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import SwitchSelector from "react-native-switch-selector";
 import lightMode from "../assets/themes/Light";
 import { Ionicons } from "@expo/vector-icons";
-import { BackHandler } from "react-native";
 import { connect } from "react-redux";
-import * as Types from "../store/types";
-import { firebase } from "../../firebase";
+import { firebaseApp } from "../config/firebase";
+import * as Google from "expo-google-app-auth";
+import {
+  GoogleAuthProvider,
+  signInWithCredential,
+  getAuth,
+  onAuthStateChanged,
+} from "firebase/auth";
+import data from "../config/googleProvider.json";
+import { useSelector, useDispatch } from "react-redux";
+import { updateTheme } from "../store/themeReducer";
 
 const InitialScreen = (props) => {
-  firebase;
+  firebaseApp;
+
+  LogBox.ignoreLogs([
+    `AsyncStorage has been extracted from react-native core and will be removed in a future release.`,
+  ]);
+
+  const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const [theme, setTheme] = useState(props.theme);
+  const [theme, setTheme] = useState(useSelector((state) => state.theme.theme));
   const language = [
     { label: "En", value: "en" },
     { label: "Es", value: "es" },
@@ -49,16 +64,42 @@ const InitialScreen = (props) => {
     },
   ];
   const indexOfLang = language.findIndex((opt) => opt.value == i18n.language);
-  const indexOfTheme = themeOptions.findIndex(
-    (opt) => opt.value == props.theme
-  );
+  const indexOfTheme = themeOptions.findIndex((opt) => opt.value == theme);
+
+  const signInWithGoogleAsync = async () => {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId: data.androidClientId,
+        iosClientId: data.iosClientId,
+        scopes: ["profile", "email"],
+      });
+
+      if (result.type === "success") {
+        const { idToken, accessToken } = result;
+        const credential = GoogleAuthProvider.credential(idToken, accessToken);
+        const auth = getAuth();
+        signInWithCredential(auth, credential)
+          .then((userCredential) => {
+            props.navigation.navigate("Chat");
+          })
+          .catch((e) => console.log(e));
+      } else {
+        console.log("Permission denied");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
-    props.updateTheme(theme);
-
-    // BackHandler.addEventListener("hardwareBackPress", function () {
-    //   return true;
-    // });
+    dispatch(updateTheme(theme));
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        props.navigation.replace("Chat");
+      }
+    });
+    return unsubscribe;
   }, [theme]);
   return (
     <KeyboardAvoidingView
@@ -126,6 +167,24 @@ const InitialScreen = (props) => {
               {t("already")}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              { width: "50%", marginLeft: "25%" },
+              theme == "dark" ? styles.button : lightMode.button,
+            ]}
+            onPress={signInWithGoogleAsync}
+          >
+            <Text
+              style={theme == "dark" ? styles.buttonText : lightMode.buttonText}
+            >
+              {t("googleLogIn")}{" "}
+            </Text>
+            <Ionicons
+              name="logo-google"
+              size={25}
+              color={theme == "dark" ? "white" : "black"}
+            />
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </KeyboardAvoidingView>
@@ -155,6 +214,8 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
     backgroundColor: "black",
     padding: 10,
     marginVertical: 5,

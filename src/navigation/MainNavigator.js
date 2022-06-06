@@ -4,7 +4,6 @@ import InitialScreen from "../screens/InitialScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import ChatScreen from "../screens/ChatScreen";
-import { screenLoginOptions } from "../screens/LoginScreen";
 
 const MainStackNavigator = createStackNavigator();
 
@@ -26,6 +25,7 @@ export const MainNavigator = () => {
         component={RegisterScreen}
         options={{ headerShown: false }}
       />
+      <MainStackNavigator.Screen name="Chat" component={ChatScreen} />
     </MainStackNavigator.Navigator>
   );
 };
@@ -40,11 +40,7 @@ export const HomeNavigator = ({ navigation }) => {
         component={LoginScreen}
         options={{ headerShown: false }}
       />
-      <HomeStackNavigator.Screen
-        name="Chat"
-        component={ChatScreen}
-        // options={{ headerShown: false }}
-      />
+      <HomeStackNavigator.Screen name="Chat" component={ChatScreen} />
     </HomeStackNavigator.Navigator>
   );
 };

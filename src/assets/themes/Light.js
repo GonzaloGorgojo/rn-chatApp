@@ -10,6 +10,8 @@ const lightMode = StyleSheet.create({
   },
   button: {
     alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
     backgroundColor: "white",
     padding: 10,
     marginVertical: 5,
@@ -50,6 +52,7 @@ const lightMode = StyleSheet.create({
     borderWidth: 0.7,
     borderColor: "white",
     borderStyle: "solid",
+    color: "white",
     borderRadius: 5,
     width: 200,
   },
@@ -58,6 +61,13 @@ const lightMode = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 15,
     marginBottom: 10,
+  },
+  contentContainer: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  olderChats: {
+    color: "black",
   },
 });
 
