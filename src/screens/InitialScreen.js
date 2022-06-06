@@ -21,6 +21,7 @@ import {
   GoogleAuthProvider,
   signInWithCredential,
   getAuth,
+  onAuthStateChanged,
 } from "firebase/auth";
 import data from "../config/googleProvider.json";
 import { useSelector, useDispatch } from "react-redux";
@@ -92,6 +93,13 @@ const InitialScreen = (props) => {
 
   useEffect(() => {
     dispatch(updateTheme(theme));
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        props.navigation.replace("Chat");
+      }
+    });
+    return unsubscribe;
   }, [theme]);
   return (
     <KeyboardAvoidingView

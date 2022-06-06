@@ -62,6 +62,13 @@ const lightMode = StyleSheet.create({
     fontSize: 15,
     marginBottom: 10,
   },
+  contentContainer: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  olderChats: {
+    color: "black",
+  },
 });
 
 export default lightMode;

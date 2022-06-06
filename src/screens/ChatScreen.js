@@ -1,25 +1,28 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, View } from "react-native";
 import { BackHandler, TouchableOpacity } from "react-native";
-import { getAuth } from "@firebase/auth";
-import { db } from "../../src/config/firebase";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { getAuth, signOut } from "@firebase/auth";
+
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { ChatPanel } from "../components/chatPanel";
 
 const ChatScreen = ({ navigation }) => {
   const { t } = useTranslation();
   const theme = useSelector((state) => state.theme.theme);
-  const auth = getAuth();
-  const [test, setTest] = useState([]);
-  // const GetData = async () => {
-  //   const citiesCol = collection(db, "cities");
-  //   const citySnapshot = await getDocs(citiesCol);
-  //   const cityList = citySnapshot.docs.map((doc) => doc.data());
-  //   setTest(cityList);
-  // };
+
+  const handleSignOut = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        navigation.replace("Main");
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
   const headerOptions = {
     headerStyle: {
@@ -36,13 +39,9 @@ const ChatScreen = ({ navigation }) => {
     },
     headerRight: () => <TouchableOpacity onPress={() => {}}></TouchableOpacity>,
     headerLeft: () => (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.replace("Main");
-        }}
-      >
+      <TouchableOpacity onPress={handleSignOut}>
         <Ionicons
-          name="arrow-undo"
+          name="arrow-back-circle-sharp"
           size={25}
           color={theme === "dark" ? "white" : "black"}
         />
@@ -56,14 +55,11 @@ const ChatScreen = ({ navigation }) => {
     });
     navigation.setOptions(headerOptions);
     // GetData();
-  }, [test]);
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text>{auth.currentUser?.email}</Text>
-      {test.map((data, i) => {
-        return <Text key={i}>{data.city_name}</Text>;
-      })}
+      <ChatPanel />
       <StatusBar style="auto" />
     </View>
   );
